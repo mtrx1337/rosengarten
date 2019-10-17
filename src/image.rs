@@ -10,8 +10,8 @@ pub struct Image {
 
 
 // array with chunks of 4 elements. r/g/b/a
-pub fn set_pixel(pixel_address : u64, color : [u8; 4], mut img : Image) {
-    gamma_correct_color(color, img.gamma);
+pub fn set_pixel(pixel_address : u64, mut color : [u8; 4], img : &mut Image) {
+    color = gamma_correct_color(color, img.gamma);
     // red
     img.image[pixel_address as usize]       = color[0];
     // green
