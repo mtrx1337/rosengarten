@@ -49,7 +49,7 @@ fn main() {
         for x in 0..width {
             pixel_address = (4 * width * y + 4 * x) as u64;
 
-            color[0] = clamp((255 * !(x & y)) as u64, 0, 255) as u8;
+            color[0] = clamp((255 * (x & y) != 0) as u64, 0, 255) as u8;
             color[1] = clamp((x ^ y) as u64         , 0, 255) as u8;
             color[2] = clamp((x | y) as u64         , 0, 255) as u8;
             color[3] = clamp(255                    , 0, 255);
