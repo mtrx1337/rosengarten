@@ -1,7 +1,5 @@
 extern crate num;
-
-mod ppm;
-mod image;
+extern crate image;
 
 use std::string::String;
 use std::vec::Vec;
@@ -20,7 +18,7 @@ impl From<ParseIntError> for ParseArgsError {
     }
 }
 
-pub fn parse_args() -> Result<(String, u16, u16), ParseArgsError> {
+pub fn parse_args() -> Result<(String, u32, u32), ParseArgsError> {
     let argv = std::env::args().collect::<Vec<_>>();
     match argv.get(1..4) {
         Some(argv) => Ok((String::from(&argv[0]), argv[1].parse()?, argv[2].parse()?)),
@@ -34,31 +32,19 @@ fn main() {
         Err(e) => { println!("{:?}", e); print_help(); return; }
     };
 
-    let mut img = image::Image {
-        filename: filename,
-        width: width,
-        height: height,
-        gamma: 2.2,
-        image: vec![0; (width * height * 4) as usize]
-    };
+    let mut img = image::ImageBuffer::new(width, height);
 
-    let mut color: [u8; 4] = [0, 0, 0, 0];
-    let mut pixel_address: u64;
-
-    for y in 0..height {
-        for x in 0..width {
-            pixel_address = (4 * width * y + 4 * x) as u64;
-
-            color[0] = clamp((255 * (x & y) != 0) as u64, 0, 255) as u8;
-            color[1] = clamp((x ^ y) as u64         , 0, 255) as u8;
-            color[2] = clamp((x | y) as u64         , 0, 255) as u8;
-            color[3] = clamp(255                    , 0, 255);
-
-            image::set_pixel(pixel_address, color, &mut img);
-        }
+    for (x, y, pixel) in img.enumerate_pixels_mut() {
+        let r = clamp((255 * (x & y) != 0) as u64, 0, 255) as u8;
+        let g = clamp((x ^ y) as u64             , 0, 255) as u8;
+        let b = clamp((x | y) as u64             , 0, 255) as u8;
+        *pixel = image::Rgb([r, g, b]);
     }
 
-    ppm::write_rgb_ppm(&mut img);
+    match img.save(filename) {
+        Ok(v) => v,
+        Err(e) => println!("Couldn't save image file. {}", e),
+    };
 }
 
 fn print_help() {
