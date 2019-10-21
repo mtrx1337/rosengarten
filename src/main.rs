@@ -1,10 +1,20 @@
 extern crate num;
 extern crate image;
 
+use raytracer::camera;
 use std::string::String;
 use std::vec::Vec;
 use num::clamp;
 use std::num::ParseIntError;
+use f64::consts::PI;
+use raytracer::shapes::*;
+
+const WIDTH = 1920;
+const HEIGHT = 1080;
+const SAMPLES = 20;
+const TRACE_DEPTH = 10;
+const FOV = PI / 2; // 90 degrees
+const ORIGIN = vec![0; 3 as usize];
 
 #[derive(Debug)]
 pub enum ParseArgsError {
@@ -27,24 +37,28 @@ pub fn parse_args() -> Result<(String, u32, u32), ParseArgsError> {
 }
 
 fn main() {
-    let (filename, width, height) = match parse_args() {
+    let (filename, res_multiplier) = match parse_args() {
         Ok(v) => v,
         Err(e) => { println!("{:?}", e); print_help(); return; }
     };
 
+    let width = WIDTH * res_multiplier;
+    let height = HEIGHT * res_multiplier;
+
+    //let camera = image::camera::new(width, height, FOV);
+
     let mut img = image::ImageBuffer::new(width, height);
 
-    for (x, y, pixel) in img.enumerate_pixels_mut() {
-        let r = clamp((255 * (x & y) != 0) as u64, 0, 255) as u8;
-        let g = clamp((x ^ y) as u64             , 0, 255) as u8;
-        let b = clamp((x | y) as u64             , 0, 255) as u8;
-        *pixel = image::Rgb([r, g, b]);
-    }
+    let scene : Group = init_scene();
 
     match img.save(filename) {
         Ok(v) => v,
         Err(e) => println!("Couldn't save image file. {}", e),
     };
+}
+
+fn init_scene() -> Group {
+    // TODO
 }
 
 fn print_help() {
