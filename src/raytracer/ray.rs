@@ -1,12 +1,12 @@
-use std::vec::Vec;
+use rulinalg::vector::Vector;
 
 pub struct Ray {
-    pub vec![u8; 3 as usize];
-    pub vec![u8; 3 as usize];
-    pub min : f32;
-    pub max : f32;
+    pub origin: Vector<f32>,
+    pub norm_dir: Vector<f32>,
+    pub min : f32,
+    pub max : f32,
 }
 
-pub point_at(t : f32) -> Vec {
-    // TODO
+pub fn point_at(ray: Ray, t: f32) -> Vector<f32> {
+    return (ray.norm_dir * t) + ray.origin;
 }

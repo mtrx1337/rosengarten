@@ -1,5 +1,8 @@
-struct MaterialProperties {
-    pub albedo : vec![f32; 3 as usize];
-    pub emission : vec![f32; 3 as usize];
-    pub ray : ray::Ray;
+use rulinalg::vector::Vector;
+use crate::raytracer::ray::Ray;
+
+pub struct MaterialProperties {
+    pub albedo : Vector<f32>,
+    pub emission : Vector<f32>,
+    pub ray : Ray,
 }
