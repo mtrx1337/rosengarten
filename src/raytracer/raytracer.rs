@@ -5,20 +5,18 @@ use rulinalg::matrix::Matrix;
 use rulinalg::vector::Vector;
 
 mod Raytracer {
-use num::clamp;
+    use num::clamp;
 
-    pub fn raytrace(height: u16,
-                    width: u16,
-                    trace_depth: u8,
-                    img: image::ImageBuffer<image::Pixel, image::Pixel::Subpixel>) -> image::ImageBuffer<image::Pixel, image::Pixel::Subpixel> {
-
+    pub fn raytrace(
+        height: u16,
+        width: u16,
+        trace_depth: u8,
+        img: image::ImageBuffer<u32, u32>,
+    ) -> image::ImageBuffer<u32, u32> {
         for (x, y, pixel) in img.enumerate_pixels_mut() {
-            let r = clamp::<u64>
-                ((255 * (x & y) != 0) as u64, 0, 255) as u8;
-            let g = clamp::<u64>
-                ((x ^ y) as u64             , 0, 255) as u8;
-            let b = clamp::<u64>
-                ((x | y) as u64             , 0, 255) as u8;
+            let r: u8 = clamp::<u64>((255 * (x & y) != 0) as u64, 0, 255) as u8;
+            let g: u8 = clamp::<u64>((x ^ y) as u64, 0, 255) as u8;
+            let b: u8 = clamp::<u64>((x | y) as u64, 0, 255) as u8;
             *pixel = image::Rgb([r, g, b]);
         }
 

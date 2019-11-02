@@ -1,14 +1,14 @@
 extern crate rulinalg;
 
-use rulinalg::vector::Vector;
 use crate::raytracer::materials::material::Material;
 use crate::raytracer::ray::Ray;
+use rulinalg::vector::Vector;
 
-pub struct Shape {
-    intersect: Intersection,
-    center: Vector,
-    radius: f32,
-    material: Material,
+pub trait Shape {
+    fn intersect(&self);
+    fn new(&self);
+}
 
-    pub fn intersect(ray: Ray),
+pub trait Intersection {
+    fn intersect(&self, ray: Ray) -> Intersection;
 }

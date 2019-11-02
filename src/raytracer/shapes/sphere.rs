@@ -1,21 +1,28 @@
 extern crate rulinalg;
 
 use rulinalg::vector::Vector;
-
-use shape;
-use crate::raytracer::intersection;
+use crate::raytracer::ray::Ray;
+use crate::raytracer::shapes::shape::Shape;
+use crate::raytracer::intersection::Intersection;
 use crate::raytracer::materials::material::Material;
 
-pub impl shape::Shape {
-    pub fn new(&self, center: Vector, radius: f32, material: Material) -> Shape {
+struct Sphere {
+    intersect: Intersection,
+    center: Vector<f32>,
+    radius: f32,
+    material: Material,
+}
+
+impl Shape for Sphere {
+    fn new(&self, center: Vector<f32>, radius: f32, material: Material) -> Shape {
         &self.center = center;
         &self.radius = radius;
         &self.material = material;
     }
 
-    pub fn intersect(ray: Ray) {
+    fn intersect(ray: Ray) {
         // hit vector coordinates
-        let a : f32 = ray.norm_dir.elemul(ray.norm_dir);
+        let a: f32 = ray.norm_dir.elemul(ray.norm_dir);
         // TODO
     }
 }

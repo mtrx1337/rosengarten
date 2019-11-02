@@ -3,14 +3,14 @@ extern crate rulinalg;
 use rulinalg::matrix::Matrix;
 
 pub struct Transformation {
-    pub trans_mat : Matrix,
-    pub trans_mat_inv: Matrix,
-    pub trans_mat_transposed: Matrix,
-    pub trans_mat_inv_transposed: Matrix,
-};
+    pub trans_mat : Matrix<f32>,
+    pub trans_mat_inv: Matrix<f32>,
+    pub trans_mat_transposed: Matrix<f32>,
+    pub trans_mat_inv_transposed: Matrix<f32>,
+}
 
-pub impl Transformation {
-    fn update(transformation: Transformation, matrix: Matrix) {
+impl Transformation {
+    fn new(matrix: Matrix<f32>) {
 
         transformation.trans_mat = matrix;
 
@@ -26,7 +26,7 @@ pub impl Transformation {
         transformation.trans_mat_inv_transposed = matrix
                                         .clone()
                                         .inverse()
-                                        .expect("Matrix was not square when attempting inversion.");
+                                        .expect("Matrix was not square when attempting inversion.")
                                         .transpose();
     }
 }
