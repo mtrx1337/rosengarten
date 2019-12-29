@@ -1,5 +1,5 @@
 use crate::raytracer::materials::material::Material;
 
-impl Material {
+pub struct Background {
     // TODO
 }
